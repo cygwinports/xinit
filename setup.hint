@@ -1,0 +1,4 @@
+category: X11
+requires: cygwin libX11_6 util-linux
+sdesc: "Xorg X server initializer"
+ldesc: "Xorg X server initializer"
