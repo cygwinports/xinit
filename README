@@ -49,9 +49,12 @@ This will create:
 
 Files included in the binary package:
 
+  /etc/X11/xinit/xinitrc
   /usr/bin/startx
+  /usr/bin/startxdmcp.bat
+  /usr/bin/startxwin.bat
+  /usr/bin/startxwin.sh
   /usr/bin/xinit.exe
-  /usr/lib/X11/xinit/xinitrc
   /usr/share/doc/xinit-1.1.0/COPYING
   /usr/share/doc/xinit-1.1.0/ChangeLog
   /usr/share/doc/xinit-1.1.0/README
@@ -61,6 +64,10 @@ Files included in the binary package:
 ------------------
 
 Port Notes:
+
+----- version 1.1.0-2 -----
+Added startxdmcp.bat and startxwin.{bat,sh} from X-startup-scripts.
+Moved xinitrc dir to /etc/X11/xinit.
 
 ----- version 1.1.0-1 -----
 Version bump.

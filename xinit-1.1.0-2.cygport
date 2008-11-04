@@ -1,0 +1,14 @@
+inherit xorg
+
+SRC_URI+=" startxdmcp.bat startxwin.bat startxwin.sh"
+
+MAKEOPTS+=" XINITDIR=/etc/X11/xinit"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	cd ${S}
+	dobin startxdmcp.bat startxwin.bat startxwin.sh
+	unix2dos ${D}/usr/bin/*.bat
+}
