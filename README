@@ -50,6 +50,8 @@ This will create:
 Files included in the binary package:
 
   /etc/X11/xinit/xinitrc
+  /etc/postinstall/xinit.sh
+  /etc/preremove/xinit.sh
   /usr/bin/startx
   /usr/bin/startxdmcp.bat
   /usr/bin/startxwin.bat
@@ -64,6 +66,10 @@ Files included in the binary package:
 ------------------
 
 Port Notes:
+
+----- version 1.1.0-3 -----
+Added postinstall/preremove scripts to create/remove a Start Menu 
+shortcut for XWin.
 
 ----- version 1.1.0-2 -----
 Added startxdmcp.bat and startxwin.{bat,sh} from X-startup-scripts.

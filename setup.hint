@@ -1,4 +1,4 @@
 category: X11
-requires: cygwin libX11_6 sed util-linux xauth xmodmap xrdb xorg-server xterm
+requires: cygwin cygutils libX11_6 sed util-linux xauth xmodmap xrdb xorg-server xterm
 sdesc: "X.Org X server initializer"
 ldesc: "X.Org X server initializer"
