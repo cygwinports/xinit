@@ -22,6 +22,10 @@ SET RUN=%CYGWIN_ROOT%\bin\run -p /usr/bin
 
 SET PATH=.;%CYGWIN_ROOT%\bin;%PATH%
 
+SET XAPPLRESDIR=
+SET XCMSDB=
+SET XKEYSYMDB=
+SET XNLSPATH=
 
 
 REM
@@ -58,75 +62,7 @@ echo startxwin.bat - Starting on Windows NT/2000/XP/2003
 
 :STARTUP
 
-REM Brief descriptions of XWin-specific options:
-REM
-REM -screen scr_num [width height]
-REM      Enable screen scr_num and optionally specify a width and
-REM      height for that screen.
-REM      Most importantly, any parameters specified before the first -screen
-REM      parameter apply to all screens.  Any options after the first -screen
-REM      parameter apply only to the screen that precedes the parameter.
-REM      Example:
-REM          XWin -fullscreen -screen 0 -screen 1 -depth 8 -screen 2
-REM      All screens will be fullscreen, but screen 2 will be depth 8, while
-REM      screens 0 and 1 will be the default depth (whatever depth Windows
-REM      is currently running at).
-REM -multiwindow
-REM      Start an integrated Windows-based window manager.  Not to be used
-REM      with -rootless nor -fullscreen.
-REM -rootless
-REM      Use a transparent root window with an external window manager
-REM      (such as twm).  Not to be used with -multiwindow nor
-REM      with -fullscreen.
-REM -fullscreen
-REM      Use a window as large as possible on the primary monitor.
-REM -multiplemonitors
-REM      Create a root window that covers all monitors on a
-REM      system with multiple monitors.
-REM -clipboard
-REM      Enable the integrated version of xwinclip.  Do not use in
-REM      conjunction with the xwinclip program.
-REM -depth bits_per_pixel
-REM      Specify the screen depth to run at (in bits per pixel) using a
-REM      DirectDraw-based engine in conjunction with the -fullscreen
-REM      option, ignored if the -fullscreen option is not specified.
-REM      By default, you will be using a DirectDraw based engine on any
-REM      system that supports it.
-REM -unixkill
-REM      Trap Ctrl+Alt+Backspace as a server shutdown key combination.
-REM -nounixkill
-REM      Disable Ctrl+Alt+Backspace as a server shutdown key combination (default).
-REM      Example:
-REM          XWin -unixkill -screen 0 -screen 1 -screen 2 -nounixkill
-REM      Screens 0 and 1 will allow Ctrl+Alt+Backspace, but screen 2 will not.
-REM -winkill
-REM      Trap Alt+F4 as a server shutdown key combination (default).
-REM -nowinkill
-REM      Disable Alt+F4 as a server shutdown key combination.
-REM -scrollbars
-REM      Enable resizing of the server display window.  Do not use in conjunction
-REM      with -multiwindow nor with -rootless.
-REM -nodecoration
-REM      Draw the server root window without a title bar or border.
-REM      Do not use with -mutliwindow nor with -rootless.
-REM -lesspointer
-REM      Hide the Windows mouse cursor anytime it is over any part of the
-REM      window, even if Cygwin/X is not the window with the focus.
-REM -refresh rate_in_Hz
-REM      Specify a refresh rate to use when used with the -fullscreen option.
-REM -trayicon
-REM      Enable the tray icon (default).
-REM -notrayicon
-REM      Disable the tray icon.
-REM      Example:
-REM          XWin -notrayicon -screen 0 -screen 1 -screen 2 -trayicon
-REM      Screens 0 and 1 will not have tray icons, but screen 2 will.
-REM -emulate3buttons [timeout]
-REM      Emulate 3 button mouse with an optional timeout in milliseconds.
-REM -xf86config
-REM      Specify an XF86Config-style configuration file.
-REM -keyboard
-REM      Specify a keyboard device from the configuration file.
+REM Description of XWin-specific options is in XWin(1) manpage.
 
 
 REM

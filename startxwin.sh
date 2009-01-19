@@ -2,6 +2,12 @@
 export DISPLAY=127.0.0.1:0.0
 export PATH=/usr/bin:"$PATH"
 
+unset XAPPLRESDIR
+unset XCMSDB
+unset XKEYSYMDB
+unset XNLSPATH
+
+
 # Cleanup from last run.
 rm -rf /tmp/.X11-unix
 
@@ -13,75 +19,7 @@ rm -rf /tmp/.X11-unix
 # http://x.cygwin.com/docs/faq/cygwin-x-faq.html#q-error-font-eof
 
 
-# Brief descriptions of XWin-specific options:
-#
-# -screen scr_num [width height]
-#      Enable screen scr_num and optionally specify a width and
-#      height for that screen.
-#      Most importantly, any parameters specified before the first -screen
-#      parameter apply to all screens.  Any options after the first -screen
-#      parameter apply only to the screen that precedes the parameter.
-#      Example:
-#          XWin -fullscreen -screen 0 -screen 1 -depth 8 -screen 2
-#      All screens will be fullscreen, but screen 2 will be depth 8, while
-#      screens 0 and 1 will be the default depth (whatever depth Windows
-#      is currently running at).
-# -multiwindow
-#      Start an integrated Windows-based window manager.  Not to be used
-#      with -rootless nor -fullscreen.
-# -rootless
-#      Use a transparent root window with an external window manager
-#      (such as twm).  Not to be used with -multiwindow nor
-#      with -fullscreen.
-# -fullscreen
-#      Use a window as large as possible on the primary monitor.
-# -multiplemonitors
-#      Create a root window that covers all monitors on a
-#      system with multiple monitors.
-# -clipboard
-#      Enable the integrated version of xwinclip.  Do not use in
-#      conjunction with the xwinclip program.
-# -depth bits_per_pixel
-#      Specify the screen depth to run at (in bits per pixel) using a
-#      DirectDraw-based engine in conjunction with the -fullscreen
-#      option, ignored if the -fullscreen option is not specified.
-#      By default, you will be using a DirectDraw based engine on any
-#      system that supports it.
-# -unixkill
-#      Trap Ctrl+Alt+Backspace as a server shutdown key combination.
-# -nounixkill
-#      Disable Ctrl+Alt+Backspace as a server shutdown key combination (default).
-#      Example:
-#          XWin -unixkill -screen 0 -screen 1 -screen 2 -nounixkill
-#      Screens 0 and 1 will allow Ctrl+Alt+Backspace, but screen 2 will not.
-# -winkill
-#      Trap Alt+F4 as a server shutdown key combination (default).
-# -nowinkill
-#      Disable Alt+F4 as a server shutdown key combination.
-# -scrollbars
-#      Enable resizing of the server display window.  Do not use in conjunction
-#      with -multiwindow nor with -rootless.
-# -nodecoration
-#      Draw the server root window without a title bar or border.
-#      Do not use with -mutliwindow nor with -rootless.
-# -lesspointer
-#      Hide the Windows mouse cursor anytime it is over any part of the
-#      window, even if Cygwin/X is not the window with the focus.
-# -refresh rate_in_Hz
-#      Specify a refresh rate to use when used with the -fullscreen option.
-# -trayicon
-#      Enable the tray icon (default).
-# -notrayicon
-#      Disable the tray icon.
-#      Example:
-#          XWin -notrayicon -screen 0 -screen 1 -screen 2 -trayicon
-#      Screens 0 and 1 will not have tray icons, but screen 2 will.
-# -emulate3buttons [timeout]
-#      Emulate 3 button mouse with an optional timeout in milliseconds.
-# -xf86config
-#      Specify an XF86Config-style configuration file.
-# -keyboard
-#      Specify a keyboard device from the configuration file.
+# Description of XWin-specific options is in XWin(1) manpage.
 
 
 #

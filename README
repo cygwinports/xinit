@@ -5,6 +5,7 @@ X.Org X Server initializer
 Runtime requirements:
   cygwin-1.5.25-15
   libX11_6-1.1.5-1
+  run
   sed
   util-linux
   xauth
@@ -16,9 +17,9 @@ Runtime requirements:
 Build requirements:
 (besides corresponding devel packages)
   autoconf2.5-2.63-1
-  automake1.10-1.10.1-1
+  automake1.10-1.10.1-2
   binutils-20080624-2
-  cygport-0.4.2-1
+  cygport-0.4.3-1
   gawk-3.1.6-1
   gcc-core-3.4.4-3
   make-3.81-1
@@ -66,6 +67,11 @@ Files included in the binary package:
 ------------------
 
 Port Notes:
+
+----- version 1.1.1-1 -----
+Version bump.
+Forced unsetting of XAPPRESDIR and friends in startup scripts.
+Windows shortcut uses run(1).
 
 ----- version 1.1.0-3 -----
 Added postinstall/preremove scripts to create/remove a Start Menu 
