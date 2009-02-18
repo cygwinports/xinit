@@ -4,7 +4,7 @@ X.Org X Server initializer
 
 Runtime requirements:
   cygwin-1.5.25-15
-  libX11_6-1.1.5-1
+  libX11_6-1.1.5-2
   run
   sed
   util-linux
@@ -36,15 +36,15 @@ Canonical download:
 -------------------------------------------
 
 Build instructions:
-  unpack xinit-1.1.0-X-src.tar.bz2
+  unpack xinit-1.1.1-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./xinit-1.1.0-X.cygport all
+  cygport ./xinit-1.1.1-X.cygport all
 
 This will create:
-  /usr/src/xinit-1.1.0-X-src.tar.bz2
-  /usr/src/xinit-1.1.0-X.tar.bz2
+  /usr/src/xinit-1.1.1-X-src.tar.bz2
+  /usr/src/xinit-1.1.1-X.tar.bz2
 
 -------------------------------------------
 
@@ -58,15 +58,18 @@ Files included in the binary package:
   /usr/bin/startxwin.bat
   /usr/bin/startxwin.sh
   /usr/bin/xinit.exe
-  /usr/share/doc/xinit-1.1.0/COPYING
-  /usr/share/doc/xinit-1.1.0/ChangeLog
-  /usr/share/doc/xinit-1.1.0/README
+  /usr/share/doc/xinit-1.1.1/COPYING
+  /usr/share/doc/xinit-1.1.1/ChangeLog
+  /usr/share/doc/xinit-1.1.1/README
   /usr/share/man/man1/startx.1.gz
   /usr/share/man/man1/xinit.1.gz
 
 ------------------
 
 Port Notes:
+
+----- version 1.1.1-2 -----
+Patch for $HOME containing spaces.
 
 ----- version 1.1.1-1 -----
 Version bump.

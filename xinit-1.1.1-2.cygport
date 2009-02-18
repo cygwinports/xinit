@@ -1,6 +1,7 @@
 inherit xorg
 
 SRC_URI+=" startxdmcp.bat startxwin.bat startxwin.sh"
+PATCH_URI="1.1.1-HOME-with-spaces.patch"
 
 MAKEOPTS+=" XINITDIR=/etc/X11/xinit"
 
