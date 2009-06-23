@@ -2,11 +2,14 @@
 SET DISPLAY=127.0.0.1:0.0
 
 REM
-REM Change REMOTE_HOST to the IP address or hostname of your remote host,
-REM unless your remote host happens to have the address 10.0.0.1.
+REM The IP address or hostname of your remote host can be specified as the
+REM first (and only) argument to this script. You may also specify the default
+REM value in the IF statement below.
 REM
 
-SET REMOTE_HOST=10.0.0.1
+SET REMOTE_HOST=%1
+
+IF "%REMOTE_HOST%" == "" SET REMOTE_HOST=10.0.0.1
 
 
 REM 
