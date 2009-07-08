@@ -12,16 +12,6 @@ unset XNLSPATH
 rm -rf /tmp/.X11-unix
 
 
-# The error "Fatal server error: could not open default font 'fixed'" is
-# caused by using a DOS mode mount for the mount that the Cygwin/X
-# fonts are accessed through.  See the Cygwin/X FAQ for more
-# information:
-# http://x.cygwin.com/docs/faq/cygwin-x-faq.html#q-error-font-eof
-
-
-# Description of XWin-specific options is in XWin(1) manpage.
-
-
 #
 # Startup the programs
 #
@@ -31,6 +21,8 @@ rm -rf /tmp/.X11-unix
 # WARNING: Do not use 'xwinclip' in conjunction with the ``-clipboard''
 # command-line parameter for XWin.  Doing so would start two clipboard
 # managers, which is never supposed to happen.
+
+# Description of XWin-specific options is in XWin(1) manpage.
 
 XWin -multiwindow -clipboard -silent-dup-error &
 
