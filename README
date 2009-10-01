@@ -3,10 +3,11 @@ xinit
 X.Org X Server initializer
 
 Runtime requirements:
-  cygwin-1.7.0-50
+  cygwin-1.7.0-61
   libgcc1-4.3.2-2
-  libX11_6-1.2.1-1
+  libX11_6-1.2.2-1
   run
+  run2
   sed
   util-linux
   xauth
@@ -19,14 +20,14 @@ Build requirements:
 (besides corresponding devel packages)
   autoconf2.5-2.63-10
   automake1.10-1.10.2-10
-  binutils-20080624-2
-  cygport-0.9.7-1
-  gawk-3.1.6-2
+  binutils-2.19.51-1
+  cygport-0.9.9-1
+  gawk-3.1.7-1
   gcc4-core-4.3.2-2
   make-3.81-2
   pkg-config-0.23b-10
   sed-4.1.5-2
-  xorg-util-macros-1.2.1-1
+  xorg-util-macros-1.2.2-1
 
 Canonical website:
   http://xorg.freedesktop.org/
@@ -69,8 +70,16 @@ Files included in the binary package:
 
 Port Notes:
 
+----- version 1.1.1-5 -----
+Bugfixes for startxwin.{bat,sh}:
+* Launch XWin from within a bash login shell, so programs launched by
+  the XWin tray menu are within a regular environment.
+* Wait for XWin to be ready to accept connections before launching xterm.
+* Delete only the socket for the display which we are launching, to avoid
+  clobbering other XWin instances running in other DISPLAYs.
+
 ----- version 1.1.1-4 -----
-Patches for http://sourceware.org/bugzilla/show_bug.cgi?id=10371
+Added patches:
 * Don't add '.' to $PATH.
 * startxwin.bat should set CYGWIN_ROOT correctly now, regardless of
   where Cygwin is installed.  It can be overriden by setting it in

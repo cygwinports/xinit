@@ -1,5 +1,7 @@
 http://sourceware.org/bugzilla/show_bug.cgi?id=9864
 
+Already applied in upstream git.
+
 --- origsrc/xinit-1.1.1/startx.cpp	2008-12-17 14:59:54.000000000 -0600
 +++ src/xinit-1.1.1/startx.cpp	2009-02-18 11:18:37.902875000 -0600
 @@ -279,7 +279,7 @@ if [ x"$enable_xauth" = x1 ] ; then

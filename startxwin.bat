@@ -51,8 +51,11 @@ REM managers, which is never supposed to happen.
 
 REM Description of XWin-specific options is in XWin(1) manpage.
 
-%RUN% XWin -multiwindow -clipboard -silent-dup-error
+%RUN% bash -l -c "XWin -multiwindow -clipboard -silent-dup-error"
 
+REM Make sure XWin is ready to accept connections before proceeding
+
+%RUN% checkX -d %DISPLAY% -t 12
 
 REM Startup an xterm, using bash as the shell.
 

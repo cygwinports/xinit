@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash -l
 export DISPLAY=127.0.0.1:0.0
 export PATH=/usr/bin:"$PATH"
 
@@ -9,7 +9,7 @@ unset XNLSPATH
 
 
 # Cleanup from last run.
-rm -rf /tmp/.X11-unix
+rm -f /tmp/.X11-unix/X0
 
 
 #
@@ -26,6 +26,9 @@ rm -rf /tmp/.X11-unix
 
 XWin -multiwindow -clipboard -silent-dup-error &
 
+# Make sure XWin is ready to accept connections before proceeding
+
+checkX -d $DISPLAY -t 12
 
 # Startup an xterm, using bash as the shell.
 
