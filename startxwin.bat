@@ -55,7 +55,7 @@ REM Description of XWin-specific options is in XWin(1) manpage.
 
 REM Make sure XWin is ready to accept connections before proceeding
 
-%RUN% checkX -d %DISPLAY% -t 12
+%RUN% checkX -wait -d %DISPLAY% -t 12
 
 REM Startup an xterm, using bash as the shell.
 
