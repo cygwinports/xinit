@@ -1,11 +1,10 @@
 inherit xorg
 
 SRC_URI+=" startxdmcp.bat startxwin.bat startxwin.sh"
-PATCH_URI="1.1.1-HOME-with-spaces.patch"
 
 xinit_CONTENTS="etc/X11/ etc/p* usr/"
 
-MAKEOPTS+=" XINITDIR=/etc/X11/xinit"
+CYGCONF_ARGS="--with-xinitdir=/etc/X11/xinit --without-launchd"
 
 src_install() {
 	cd ${B}

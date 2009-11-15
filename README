@@ -19,7 +19,7 @@ Runtime requirements:
 Build requirements:
 (besides corresponding devel packages)
   autoconf2.5-2.63-10
-  automake1.10-1.10.2-10
+  automake1.11-1.11-10
   binutils-2.19.51-1
   cygport-0.9.10-1
   gawk-3.1.7-1
@@ -38,37 +38,22 @@ Canonical download:
 -------------------------------------------
 
 Build instructions:
-  unpack xinit-1.1.1-X-src.tar.bz2
+  unpack xinit-1.2.0-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./xinit-1.1.1-X.cygport all
+  cygport ./xinit-1.2.0-X.cygport all
 
 This will create:
-  /usr/src/xinit-1.1.1-X-src.tar.bz2
-  /usr/src/xinit-1.1.1-X.tar.bz2
+  /usr/src/xinit-1.2.0-X-src.tar.bz2
+  /usr/src/xinit-1.2.0-X.tar.bz2
 
 -------------------------------------------
 
-Files included in the binary package:
-
-  /etc/X11/xinit/xinitrc
-  /etc/postinstall/xinit.sh
-  /etc/preremove/xinit.sh
-  /usr/bin/startx
-  /usr/bin/startxdmcp.bat
-  /usr/bin/startxwin.bat
-  /usr/bin/startxwin.sh
-  /usr/bin/xinit.exe
-  /usr/share/doc/xinit/COPYING
-  /usr/share/doc/xinit/ChangeLog
-  /usr/share/doc/xinit/README
-  /usr/share/man/man1/startx.1.gz
-  /usr/share/man/man1/xinit.1.gz
-
-------------------
-
 Port Notes:
+
+----- version 1.2.0-1 -----
+Version bump for X11R7.5.
 
 ----- version 1.1.1-6 -----
 Bugfix for startxwin.bat:
