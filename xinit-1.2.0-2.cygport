@@ -1,7 +1,11 @@
 inherit xorg
 
-SRC_URI+=" startxdmcp.bat startxwin.bat startxwin.sh"
+SRC_URI+=" startxdmcp.bat"
+PATCH_URI="1.2.0-startxwin.patch"
 
+DISTCLEANFILES="startxwin.man"  # created by patch
+
+# make sure we do not forget to add postinstall/preremove
 xinit_CONTENTS="etc/X11/ etc/p* usr/"
 
 CYGCONF_ARGS="--with-xinitdir=/etc/X11/xinit --without-launchd"
@@ -11,6 +15,6 @@ src_install() {
 	cyginstall
 
 	cd ${S}
-	dobin startxdmcp.bat startxwin.bat startxwin.sh
+	dobin startxdmcp.bat
 	unix2dos ${D}/usr/bin/*.bat
 }

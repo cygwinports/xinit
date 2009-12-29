@@ -1,0 +1,288 @@
+--- origsrc/xinit-1.2.0/Makefile.am	2009-10-13 10:34:40.000000000 -0500
++++ src/xinit-1.2.0/Makefile.am	2009-12-29 14:40:36.979006200 -0600
+@@ -58,6 +58,15 @@ CPP_FILES_FLAGS = \
+ 	-D__bindir__="$(bindir)" \
+ 	-DLAUNCHD_ID_PREFIX="$(launchdidprefix)"
+ 
++if CYGWIN
++bin_PROGRAMS += startxwin
++startxwin_SOURCES = $(xinit_SOURCES)
++startxwin_CPPFLAGS = $(AM_CPPFLAGS) -DSTARTXWIN -DXINITRC="\".startxwinrc\"" -DXINITRC_ENV="\"STARTXWINRC\""
++startxwin_LDADD = $(xinit_LDADD)
++
++appman_PRE += startxwin.man
++endif
++
+ if LAUNCHD
+ $(launchdidprefix).startx.plist.cpp: org.x.startx.plist.cpp
+ 	cp $< $@
+--- origsrc/xinit-1.2.0/configure.ac	2009-11-14 07:44:28.000000000 -0600
++++ src/xinit-1.2.0/configure.ac	2009-12-28 02:05:09.000000000 -0600
+@@ -209,5 +209,7 @@ AC_SUBST(XAUTH)
+ AC_SUBST(XINIT)
+ AC_SUBST(XINITDIR)
+ 
++AM_CONDITIONAL(CYGWIN, test "$XSERVERNAME" = "XWin")
++
+ AC_OUTPUT([Makefile])
+ AC_OUTPUT([privileged_startx/Makefile])
+--- origsrc/xinit-1.2.0/startxwin.man	1969-12-31 18:00:00.000000000 -0600
++++ src/xinit-1.2.0/startxwin.man	2009-12-29 14:36:28.001765500 -0600
+@@ -0,0 +1,156 @@
++.\"
++.\" Copyright 1988, 1998  The Open Group
++.\"
++.\" Permission to use, copy, modify, distribute, and sell this software and its
++.\" documentation for any purpose is hereby granted without fee, provided that
++.\" the above copyright notice appear in all copies and that both that
++.\" copyright notice and this permission notice appear in supporting
++.\" documentation.
++.\"
++.\" The above copyright notice and this permission notice shall be included
++.\" in all copies or substantial portions of the Software.
++.\"
++.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
++.\" OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++.\" MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
++.\" IN NO EVENT SHALL THE OPEN GROUP BE LIABLE FOR ANY CLAIM, DAMAGES OR
++.\" OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
++.\" ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
++.\" OTHER DEALINGS IN THE SOFTWARE.
++.\"
++.\" Except as contained in this notice, the name of The Open Group shall
++.\" not be used in advertising or otherwise to promote the sale, use or
++.\" other dealings in this Software without prior written authorization
++.\" from The Open Group.
++.\"
++.TH STARTXWIN __appmansuffix__ __xorgversion__
++.SH NAME
++startxwin \- Cygwin XWin server initializer
++.SH SYNOPSIS
++.B startxwin
++[ [
++.I client
++]
++.I client_options
++\&\.\|.\|. ] [
++.B \-\^\-
++[
++.I display
++]
++.I server_options
++\&.\|.\|. ]
++.SH DESCRIPTION
++The \fBstartxwin\fP program is used to start the Cygwin XWin server in
++multi-window mode and a first client program.
++.PP
++If no specific client program is given on the command line,
++\fBstartxwin\fP will look for a file in the user's home directory
++called \fI.startxwinrc\fP to run as a shell script to start up client programs.
++If no such file exists, \fBstartxwin\fP will use the following as a default:
++.sp
++	xterm  \-geometry  +1+1  \-n  login  \-display  :0
++.sp
++.PP
++An important point is that programs which are run by \fI\.startxwinrc\fP
++should be run in the background if they do
++not exit right away, so that they don't prevent other programs from
++starting up.
++.PP
++An alternate client and/or server command may be specified on the
++command line.  The desired client program and its arguments should be given
++as the first command line arguments to \fBstartxwin\fP.  To specify particular
++server options, append a double dash (\-\^\-) to the \fBstartxwin\fP command
++line (after any client and arguments) followed by the desired server options.
++.PP
++The client program name name must begin with a
++slash (/) or a period (.).  Otherwise, it is treated as an argument to be
++appended to the client startup command.  This makes it possible to
++add arguments (for example, foreground and background colors) without
++having to retype the whole command line.
++.PP
++If the first argument following the
++double dash (\-\^\-) is a colon followed by a digit, \fBstartxwin\fP will use that
++number as the display
++number instead of zero.  All remaining arguments are appended to the server
++command line.
++.PP
++.SH EXAMPLES
++Below are several examples of how command line arguments in \fBstartxwin\fP are
++used.
++.TP 8
++.B "startxwin"
++This will start up an XWin server and run the user's \fI\.startxwinrc\fP,
++if it exists, or else start an \fIxterm\fP.
++.TP 8
++.B "startxwin \-\^\- :1"
++This is how one could start the server on an alternate display.
++.TP 8
++.B "startxwin \-geometry =80x65+10+10 \-fn 8x13 \-j \-fg white \-bg navy"
++This will start up the server, and will append the given
++arguments to the default \fIxterm\fP command.  It will ignore \fI\.startxwinrc\fP.
++.TP 8
++.B "startxwin /usr/bin/ssh -Y username@fasthost cpupig \-display ws:1 \-\^\- :1 \-a 2 \-t 5"
++This will start a server on display 1 with the arguments
++\fI\-a 2 \-t 5\fP.  It will then start a remote shell on the machine
++\fBfasthost\fP in which it will run the command \fIcpupig\fP, telling it
++to display back on the local workstation.
++.PP
++Below is a sample \fI\.startxwinrc\fP that starts a clock and several terminals.
++.sp
++.in +8
++.nf
++xrdb \-load $HOME/.Xresources
++xclock \-g 50x50\-0+0 \-bw 0 &
++xload \-g 50x50\-50+0 \-bw 0 &
++xterm \-g 80x24+0+0 &
++xterm \-g 80x24+0\-0
++.fi
++.in -8
++.sp
++Sites that want to create a common startup environment could simply create
++a default \fI\.startxwinrc\fP that references a site-wide startup file:
++.sp
++.in +8
++.nf
++\&#!/bin/sh
++\&. /usr/local/lib/site.startxwinrc
++.fi
++.in -8
++.sp
++Another approach is to write a script that starts \fBstartxwin\fP with a specific
++shell script.  Such scripts are usually named \fIx11\fP, \fIxstart\fP, or
++\fIstartx\fP and are a convenient way to provide a simple interface for
++novice users:
++.sp
++.in +8
++.nf
++\&#!/bin/sh
++startxwin /usr/local/lib/site.startxwinrc \-\^\- -br
++.fi
++.in -8
++.sp
++.SH "ENVIRONMENT VARIABLES"
++.TP 15
++.B DISPLAY
++This variable gets set to the name of the display to which clients should
++connect.
++.TP 15
++.B STARTXWINRC
++This variable specifies an init file containing shell commands to start up the
++initial windows.  By default, \fI\.startxwinrc\fP in the home directory will be
++used.
++.SH FILES
++.TP 15
++.I .startxwinrc
++default client script
++.TP 15
++.I xterm
++client to run if \fI.startxwinrc\fP does not exist
++.SH "SEE ALSO"
++.BR X (__miscmansuffix__),
++.BR Xserver (__appmansuffix__),
++.BR __XSERVERNAME__ (__appmansuffix__),
++.BR __XCONFIGFILEMAN__,
++.BR xterm (__appmansuffix__)
++.SH AUTHOR
++Bob Scheifler, MIT Laboratory for Computer Science
+--- origsrc/xinit-1.2.0/xinit.c	2009-10-13 10:34:40.000000000 -0500
++++ src/xinit-1.2.0/xinit.c	2009-12-29 14:36:05.690489300 -0600
+@@ -119,17 +119,22 @@ const char * const server_names[] = {
+     "Xorg        Common X server for most displays",
+ # endif
+ #endif
++#ifndef STARTXWIN
+     "Xvfb        Virtual frame buffer",
+     "Xfake       kdrive-based virtual frame buffer",
+     "Xnest       X server nested in a window on another X server",
+     "Xephyr      kdrive-based nested X server",
+     "Xvnc        X server accessed over VNC's RFB protocol",
+     "Xdmx        Distributed Multi-head X server",
++#endif
+     NULL};
+ 
+ #ifndef XINITRC
+ #define XINITRC ".xinitrc"
+ #endif
++#ifndef XINITRC_ENV
++#define XINITRC_ENV "XINITRC"
++#endif
+ char xinitrcbuf[256];
+ 
+ #ifndef XSERVERRC
+@@ -227,7 +232,9 @@ main(int argc, char *argv[], char *envp[
+ 	register char **sptr = server;
+ 	register char **cptr = client;
+ 	register char **ptr;
++#ifndef STARTXWIN
+ 	int pid;
++#endif
+ 	int client_given = 0, server_given = 0;
+ 	int client_args_given = 0, server_args_given = 0;
+ 	int start_of_client_args, start_of_server_args;
+@@ -320,6 +327,9 @@ main(int argc, char *argv[], char *envp[
+ 		server_args_given++;
+ 		*sptr++ = *argv++;
+ 	}
++#ifdef STARTXWIN
++	*sptr++ = "-multiwindow";
++#endif
+ 	*sptr = NULL;
+ 
+ 	/*
+@@ -331,7 +341,7 @@ main(int argc, char *argv[], char *envp[
+ 	    Bool required = False;
+ 
+ 	    xinitrcbuf[0] = '\0';
+-	    if ((cp = getenv ("XINITRC")) != NULL) {
++	    if ((cp = getenv (XINITRC_ENV)) != NULL) {
+ 		(void) snprintf (xinitrcbuf, sizeof(xinitrcbuf), "%s", cp);
+ 		required = True;
+ 	    } else if ((cp = getenv ("HOME")) != NULL) {
+@@ -350,6 +360,7 @@ main(int argc, char *argv[], char *envp[
+ 	    }
+ 	}
+ 
++#ifndef STARTXWIN
+ 	/*
+ 	 * if no server arguments given, check for a startup file and copy
+ 	 * that into the argument list
+@@ -377,6 +388,7 @@ main(int argc, char *argv[], char *envp[
+ 		}
+ 	    }
+ 	}
++#endif
+ 
+ 	/*
+ 	 * put the display name into the environment
+@@ -411,13 +423,20 @@ main(int argc, char *argv[], char *envp[
+ #endif
+ #endif
+ 
++	if (XOpenDisplay(displayNum)) {
++		Error("Another X server instance is running on DISPLAY %s\r\n", displayNum);
++		exit(ERR_EXIT);
++	}
++
+ 	if (startServer(server) > 0
+ 	 && startClient(client) > 0) {
++#ifndef STARTXWIN
+ 		pid = -1;
+ 		while (pid != clientpid && pid != serverpid
+ 		       && gotSignal == 0
+ 			)
+ 			pid = wait(NULL);
++#endif
+ 	}
+ 
+ #ifdef __APPLE__
+@@ -432,7 +451,9 @@ main(int argc, char *argv[], char *envp[
+ 	signal(SIGHUP, SIG_IGN);
+ 	signal(SIGPIPE, SIG_IGN);
+ 
++#ifndef STARTXWIN
+ 	shutdown();
++#endif
+ 
+ 	if (gotSignal != 0) {
+ 		Error("unexpected signal %d.\n", gotSignal);
