@@ -103,6 +103,7 @@
 +as the first command line arguments to \fBstartxwin\fP.  To specify particular
 +server options, append a double dash (\-\^\-) to the \fBstartxwin\fP command
 +line (after any client and arguments) followed by the desired server options.
++\fBstartxwin\fP always supplies the -multiwindow option to the X server.
 +.PP
 +The client program name name must begin with a
 +slash (/) or a period (.).  Otherwise, it is treated as an argument to be
@@ -145,7 +146,7 @@
 +xclock \-g 50x50\-0+0 \-bw 0 &
 +xload \-g 50x50\-50+0 \-bw 0 &
 +xterm \-g 80x24+0+0 &
-+xterm \-g 80x24+0\-0
++xterm \-g 80x24+0\-0 &
 +.fi
 +.in -8
 +.sp
@@ -189,13 +190,14 @@
 +.I xterm
 +client to run if \fI.startxwinrc\fP does not exist
 +.SH "SEE ALSO"
++.BR xinit(__appmansuffix__)
 +.BR X (__miscmansuffix__),
 +.BR Xserver (__appmansuffix__),
 +.BR __XSERVERNAME__ (__appmansuffix__),
 +.BR __XCONFIGFILEMAN__,
 +.BR xterm (__appmansuffix__)
 +.SH AUTHOR
-+Bob Scheifler, MIT Laboratory for Computer Science
++Yaakov Selkowitz, based on xinit
 --- origsrc/xinit-1.3.1/xinit.c	2011-04-26 00:03:42.000000000 -0500
 +++ src/xinit-1.3.1/xinit.c	2011-08-22 03:40:45.896352900 -0500
 @@ -71,17 +71,22 @@ const char * const server_names[] = {
@@ -297,3 +299,14 @@
  
      if (gotSignal != 0) {
          Errorx("unexpected signal %d", gotSignal);
+@@ -634,7 +634,9 @@ startClient(char *client[])
+     clientpid = fork();
+     if (clientpid == 0) {
+         set_environment();
++#ifndef STARTXWIN
+         setWindowPath();
++#endif
+ 
+         if (setuid(getuid()) == -1) {
+             Error("cannot change uid");
+

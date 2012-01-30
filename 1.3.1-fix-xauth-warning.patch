@@ -1,0 +1,11 @@
+--- a/startx.cpp
++++ b/startx.cpp
+@@ -287,6 +287,7 @@ if [ x"$enable_xauth" = x1 ] ; then
+     XCOMM create a file with auth information for the server. ':0' is a dummy.
+     xserverauthfile=$HOME/.serverauth.$$
+     trap "rm -f '$xserverauthfile'" HUP INT QUIT ILL TRAP KILL BUS TERM
++    touch "$xserverauthfile"
+     xauth -q -f "$xserverauthfile" << EOF
+ add :$dummy . $mcookie
+ EOF
+

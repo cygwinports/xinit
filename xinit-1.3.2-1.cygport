@@ -1,9 +1,13 @@
 inherit xorg
 
 SRC_URI+=" startxdmcp.bat"
-PATCH_URI="1.3.1-startxwin.patch"
+PATCH_URI="
+	1.3.1-startxwin.patch
+	1.3.1-displayfd.patch
+	1.3.1-fix-xauth-warning.patch
+"
 
-DISTCLEANFILES="startxwin.man"  # created by patch
+DISTCLEANFILES="man/startxwin.man"  # created by patch
 
 # make sure we do not forget to add postinstall/preremove
 xinit_CONTENTS="etc/X11/ etc/p* usr/"
