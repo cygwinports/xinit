@@ -60,7 +60,11 @@ else
 	fi
     fi
 
-    [ -x /usr/bin/gnome-keyring-daemon ] && /usr/bin/gnome-keyring-daemon --start
+    if [ -x /usr/bin/gnome-keyring-daemon ] ; then
+        eval `/usr/bin/gnome-keyring-daemon --start`
+        export GNOME_KEYRING_CONTROL GPG_AGENT_INFO SSH_AUTH_SOCK
+    fi
+
     [ -x /usr/bin/krb5-auth-dialog ] && /usr/bin/krb5-auth-dialog &
 
     if [ -x /usr/libexec/evolution/3.14/evolution-alarm-notify ] ; then
