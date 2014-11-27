@@ -1,7 +1,7 @@
---- a/xinit.c
-+++ b/xinit.c
-@@ -112,6 +112,11 @@ int serverpid = -1;
- int clientpid = -1;
+--- origsrc/xinit-1.3.4/xinit.c	2014-11-24 01:50:29.007063600 -0600
++++ src/xinit-1.3.4/xinit.c	2014-11-27 11:07:57.376128500 -0600
+@@ -107,6 +107,11 @@ pid_t serverpid = -1;
+ pid_t clientpid = -1;
  volatile int gotSignal = 0;
  
 +static int original_displayfd = -1;
@@ -11,8 +11,8 @@
 +
  static void Execute(char **vec);
  static Bool waitforserver(void);
- static Bool processTimeout(int timeout, char *string);
-@@ -206,14 +211,41 @@ main(int argc, char *argv[])
+ static Bool processTimeout(int timeout, const char *string);
+@@ -199,14 +204,36 @@ main(int argc, char *argv[])
      }
      if (argc > 0 && (argv[0][0] == ':' && isdigit(argv[0][1])))
          displayNum = *argv;
@@ -22,23 +22,19 @@
      start_of_server_args = (sptr - server);
      while (--argc >= 0) {
 +        /* Handle the -displayfd server argument transparently */
-+        if ((argc > 0) && (strcmp(argv[0],"-displayfd") == 0))
-+          {
++        if ((argc > 0) && (strcmp(argv[0],"-displayfd") == 0)) {
 +            int filedes[2];
 +
 +            original_displayfd = atoi(argv[1]);
 +
-+            if (pipe(filedes) == 0)
-+              {
++            if (pipe(filedes) == 0) {
 +                server_displayfd_read = filedes[0];
 +                sprintf(server_displayfd_write, "%d", filedes[1]);
 +                argv[1] = server_displayfd_write;
-+              }
-+            else
-+              {
++            } else {
 +                Fatal("pipe() for -displayfd failed");
-+              }
-+          }
++            }
++        }
 +
 +        /* All other server arguments are just passed through  */
          server_args_given++;
@@ -46,35 +42,20 @@
      }
 +
 +    /*
-+      if there was neither an explicit displayNum nor a
-+      -displayfd option, add the default display number
-+      to server arguments
-+    */
++     * if there was neither an explicit displayNum nor a -displayfd option,
++     * add the default display number to server arguments
++     */
 +    if ((displayNum == NULL) && (original_displayfd == -1))
 +      displayNum = *sptr++ = default_display;
 +
- #ifdef STARTXWIN
-     *sptr++ = "-multiwindow";
- #endif
-@@ -304,9 +336,9 @@ main(int argc, char *argv[])
- #endif
- #endif
+     *sptr = NULL;
  
--	if (XOpenDisplay(displayNum)) {
--        Error("Another X server instance is running on DISPLAY %s\r\n", displayNum);
--        exit(EXIT_FAILURE);
-+    if (displayNum && XOpenDisplay(displayNum)) {
-+      Error("Another X server instance is running on DISPLAY %s\r\n", displayNum);
-+      exit(EXIT_FAILURE);
-     }
- 
-     if (startServer(server) > 0
-@@ -368,6 +400,27 @@ waitforserver(void)
+     /*
+@@ -347,6 +374,26 @@ waitforserver(void)
      sleep(2);
  #endif
  
-+    if (server_displayfd_read != -1)
-+      {
++    if (server_displayfd_read != -1) {
 +        /* wait for the server to write the DISPLAY number to the displayfd pipe */
 +        int length;
 +
@@ -92,9 +73,8 @@
 +        /* XXX: this should happen after connections are being accepted */
 +        write(original_displayfd, displayfd_buf+1, length);
 +        write(original_displayfd, "\n", 1);
-+      }
++    }
 +
      for (cycles = 0; cycles < ncycles; cycles++) {
          if ((xd = XOpenDisplay(displayNum))) {
              return(TRUE);
-

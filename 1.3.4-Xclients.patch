@@ -1,0 +1,35 @@
+--- origsrc/xinit-1.3.4/Xclients	2014-11-24 01:50:28.779534700 -0600
++++ src/xinit-1.3.4/Xclients	2014-11-27 02:03:03.088793500 -0600
+@@ -12,6 +12,8 @@ GSESSION="$(type -p gnome-session)"
+ MSESSION="$(type -p mate-session)"
+ STARTKDE="$(type -p startkde)"
+ STARTLXDE="$(type -p startlxde)"
++STARTLXQT="$(type -p startlxqt)"
++STARTXFCE4="$(type -p startxfce4)"
+ 
+ # check to see if the user has a preferred desktop
+ PREFERRED=
+@@ -25,6 +27,10 @@ if [ -f /etc/sysconfig/desktop ]; then
+ 	PREFERRED="$STARTKDE"
+     elif [ "$DESKTOP" = "LXDE" ]; then
+ 	PREFERRED="$STARTLXDE"
++    elif [ "$DESKTOP" = "LXQT" ]; then
++	PREFERRED="$STARTLXQT"
++    elif [ "$DESKTOP" = "XFCE" ]; then
++	PREFERRED="$STARTXFCE4"
+     fi
+ fi
+ 
+@@ -44,6 +50,12 @@ elif [ -n "$STARTKDE" ]; then
+ elif [ -n "$STARTLXDE" ]; then
+     # if neither GNOME nor KDE then LXDE
+     exec "$STARTLXDE"
++elif [ -n "$STARTLXQT" ]; then
++    # if not LXDE either then LXQt
++    exec "$STARTLXQT"
++elif [ -n "$STARTXFCE4" ]; then
++    # if none of the above then Xfce
++    exec "$STARTXFCE4"
+ fi
+ 
+ # We should also support /etc/X11/xinit/Xclients.d scripts
