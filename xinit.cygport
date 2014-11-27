@@ -36,7 +36,7 @@ PATCH_URI="
 
 xinit_REQUIRES="dbus-x11 fbpanel run sed util-linux setxkbmap xauth xdg-user-dirs xmodmap xrdb xorg-server xterm"
 # make sure we do not forget to add postinstall/preremove
-xinit_CONTENTS="etc/X11/ etc/defaults/ etc/p* usr/"
+xinit_CONTENTS="etc/X11/ etc/defaults/ etc/postinstall/ etc/preremove/ etc/profile.d/ usr/"
 
 CYGCONF_ARGS="--with-xinitdir=/etc/X11/xinit --without-launchd"
 
