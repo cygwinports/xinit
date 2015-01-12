@@ -67,8 +67,8 @@ else
 
     [ -x /usr/bin/krb5-auth-dialog ] && /usr/bin/krb5-auth-dialog &
 
-    if [ -x /usr/libexec/evolution/3.14/evolution-alarm-notify ] ; then
-        /usr/libexec/evolution/3.14/evolution-alarm-notify &
+    if [ -x /usr/libexec/evolution/3.12/evolution-alarm-notify ] ; then
+        /usr/libexec/evolution/3.12/evolution-alarm-notify &
     elif [ -x /usr/libexec/evolution/3.10/evolution-alarm-notify ] ; then
         /usr/libexec/evolution/3.10/evolution-alarm-notify &
     fi
