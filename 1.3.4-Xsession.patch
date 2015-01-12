@@ -1,7 +1,10 @@
---- origsrc/xinit-1.3.4/Xsession	2014-11-27 13:40:33.968868200 -0600
-+++ src/xinit-1.3.4/Xsession	2014-11-27 13:57:39.496593600 -0600
-@@ -42,10 +42,8 @@ SWITCHDESKPATH=/usr/share/switchdesk
+--- origsrc/xinit-1.3.4/Xsession	2015-01-07 21:25:22.649962800 -0600
++++ src/xinit-1.3.4/Xsession	2015-01-07 21:42:24.502221600 -0600
+@@ -40,14 +40,20 @@ SWITCHDESKPATH=/usr/share/switchdesk
+ # and hard coded window managers and desktop environments will be removed from
+ # this script. 
  XCLIENTS_D=/etc/X11/xinit/Xclients.d
++XSESSIONS_D=/usr/share/xsessions
  if [ "$#" -eq 1 ] && [ -x "$XCLIENTS_D/Xclients.$1.sh" ]; then
      exec -l $SHELL -c "$CK_XINIT_SESSION $SSH_AGENT $XCLIENTS_D/Xclients.$1.sh"
 -else
@@ -11,8 +14,17 @@
 +elif [ "$#" -ge 1 ]; then
      if [ -x "$SWITCHDESKPATH/Xclients.$1" ]; then
         exec -l $SHELL -c "$SWITCHDESKPATH/Xclients.$1";
++    elif [ -f "$XSESSIONS_D/$1.desktop" ]; then
++       eval $(sed -ne 's|^\(Exec\)=\(.*\)|\1="\2"|p' "$XSESSIONS_D/$1.desktop")
++       eval $(sed -ne 's|^\(DesktopNames\)=\(.*\)|\1="\2"|;s|;|:|gp' "$XSESSIONS_D/$1.desktop")
++       export DESKTOP_SESSION="$1";
++       export XDG_SESSION_DESKTOP="$1";
++       [ -z "$DesktopNames" ] || export XDG_CURRENT_DESKTOP=${DesktopNames%:};
++       exec -l $SHELL -c "$CK_XINIT_SESSION $SSH_AGENT ${Exec}"
      fi;
-@@ -72,11 +70,10 @@ case $# in
+ 
+     case "$1" in
+@@ -72,11 +78,10 @@ case $# in
         # provides 'failsafe', 'default' or 'custom'.  KDM will do the
         # same at some point
  	    if [ "$1" != "default" -a "$1" != "custom" ]; then
