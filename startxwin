@@ -84,9 +84,12 @@ done
 if [ x"$client" = x ]; then
     client=$defaultclient
 
-    # For compatibility reasons, only use startxrc if there were no client command line arguments
+    # For compatibility reasons, only use startxwinrc if there were no client command line arguments
     if [ x"$clientargs" = x ]; then
-        if [ -f "$userclientrc" ]; then
+        if [ -f "$userclientrc" ] && [ ! -x "$userclientrc" ]; then
+            echo "Skipping $userclientrc; present but not executable"
+        fi
+        if [ -x "$userclientrc" ]; then
             client=$userclientrc
         elif [ -f "$sysclientrc" ]; then
             client=$sysclientrc
