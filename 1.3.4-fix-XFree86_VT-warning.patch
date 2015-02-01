@@ -1,0 +1,38 @@
+From 4cd8f25cf9ee705e309c5f144ff0738fb58e0e0f Mon Sep 17 00:00:00 2001
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+Date: Fri, 5 Dec 2014 20:43:46 +0000
+Subject: [PATCH app/xinit] It's not an error if the XFree86_VT property doesn't exist
+
+It's not an error if the XFree86_VT property doesn't exist, the server might not
+be Xorg
+
+Signed-off-by: Jon TURNEY <jon.turney@dronecode.org.uk>
+---
+ xinit.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/xinit.c b/xinit.c
+index 1b04911..0cbd800 100644
+--- a/xinit.c
++++ b/xinit.c
+@@ -497,11 +497,15 @@ setWindowPath(void)
+     }
+     if (XGetWindowProperty(xd, DefaultRootWindow(xd), prop, 0, 1,
+         False, AnyPropertyType, &actualtype, &actualformat,
+-        &nitems, &bytes_after, &buf)) {
+-        Errorx("No XFree86_VT property detected on X server, WINDOWPATH won't be set");
++        &nitems, &bytes_after, &buf) != Success) {
++        Errorx("XFree86_VT property fetch unexpectedly failed");
+         return;
+     }
+-    if (nitems != 1) {
++    if (nitems == 0) {
++        XFree(buf);
++        return;
++    }
++    else if (nitems != 1) {
+         Errorx("XFree86_VT property unexpectedly has %lu items instead of 1", nitems);
+         XFree(buf);
+         return;
+-- 
+2.1.4
