@@ -2,7 +2,7 @@ inherit xorg
 
 NAME="xinit"
 VERSION=1.3.4
-RELEASE=4
+RELEASE=5
 CATEGORY="X11"
 SUMMARY="X.Org X server launcher"
 DESCRIPTION="This package contains programs used to start the X Window System
@@ -28,7 +28,6 @@ SRC_URI+="
 "
 PATCH_URI="
 	fedora/xinit-1.0.2-client-session.patch
-	fedora/0001-startx-Pass-nolisten-tcp-by-default.patch
 	1.3.1-fix-xauth-warning.patch
 	1.3.4-fix-XFree86_VT-warning.patch
 	1.3.4-Xclients.patch

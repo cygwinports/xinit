@@ -26,7 +26,6 @@ defaultdisplay=":0"
 clientargs=""
 serverargs=""
 vtarg=""
-listenarg="-nolisten tcp"
 enable_xauth=1
 
 
@@ -69,8 +68,6 @@ while [ x"$1" != x ]; do
      if [ x"$serverargs" = x ] && \
    expr "$1" : ':[0-9][0-9]*$' > /dev/null 2>&1; then
   display="$1"
-     elif [ "$1" = "-listen" ]; then
-  listenarg=""
      else
   serverargs="$serverargs $1"
      fi
@@ -130,8 +127,6 @@ done
 if [ "$have_vtarg" = "no" ]; then
     serverargs="$serverargs $vtarg"
 fi
-
-serverargs="$serverargs $listenarg"
 
 # if no display, use default
 if [ x"$display" = x ]; then
