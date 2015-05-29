@@ -37,6 +37,7 @@ if [ -f $HOME/.startxwinrc ] ; then
     exec $CK_XINIT_SESSION $SSH_AGENT $HOME/.startxwinrc || \
     exec $CK_XINIT_SESSION $SSH_AGENT $HOME/.startxwinrc
 else
+    export QT_STYLE_OVERRIDE="gtk"
     # default settings
     [ -x /usr/bin/xdg-user-dirs-gtk-update ] && /usr/bin/xdg-user-dirs-gtk-update
     [ -x /usr/bin/gsettings-data-convert ] && /usr/bin/gsettings-data-convert
