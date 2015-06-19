@@ -1,39 +1,52 @@
---- origsrc/xinit-1.3.4/Xsession	2015-01-07 21:25:22.649962800 -0600
-+++ src/xinit-1.3.4/Xsession	2015-01-07 21:42:24.502221600 -0600
-@@ -40,14 +40,20 @@ SWITCHDESKPATH=/usr/share/switchdesk
- # and hard coded window managers and desktop environments will be removed from
- # this script. 
- XCLIENTS_D=/etc/X11/xinit/Xclients.d
-+XSESSIONS_D=/usr/share/xsessions
- if [ "$#" -eq 1 ] && [ -x "$XCLIENTS_D/Xclients.$1.sh" ]; then
-     exec -l $SHELL -c "$CK_XINIT_SESSION $SSH_AGENT $XCLIENTS_D/Xclients.$1.sh"
--else
- # now, we see if xdm/gdm/kdm has asked for a specific environment
--case $# in
--1)
-+elif [ "$#" -ge 1 ]; then
-     if [ -x "$SWITCHDESKPATH/Xclients.$1" ]; then
-        exec -l $SHELL -c "$SWITCHDESKPATH/Xclients.$1";
-+    elif [ -f "$XSESSIONS_D/$1.desktop" ]; then
-+       eval $(sed -ne 's|^\(Exec\)=\(.*\)|\1="\2"|p' "$XSESSIONS_D/$1.desktop")
-+       eval $(sed -ne 's|^\(DesktopNames\)=\(.*\)|\1="\2"|;s|;|:|gp' "$XSESSIONS_D/$1.desktop")
-+       export DESKTOP_SESSION="$1";
-+       export XDG_SESSION_DESKTOP="$1";
-+       [ -z "$DesktopNames" ] || export XDG_CURRENT_DESKTOP=${DesktopNames%:};
-+       exec -l $SHELL -c "$CK_XINIT_SESSION $SSH_AGENT ${Exec}"
-     fi;
- 
-     case "$1" in
-@@ -72,11 +78,10 @@ case $# in
-        # provides 'failsafe', 'default' or 'custom'.  KDM will do the
-        # same at some point
- 	    if [ "$1" != "default" -a "$1" != "custom" ]; then
--		exec $CK_XINIT_SESSION $SSH_AGENT /bin/sh -c "exec -l $SHELL -c \"$1\""
-+		exec $CK_XINIT_SESSION $SSH_AGENT /bin/sh -c "exec -l $SHELL -c \"$*\""
- 	    fi
- 	    ;;
-     esac
--esac
+--- origsrc/xinit-1.3.4/Xsession	2015-06-19 14:02:29.605214000 -0500
++++ src/xinit-1.3.4/Xsession	2015-06-19 15:21:42.458249700 -0500
+@@ -25,11 +25,36 @@ if [ -z "$GDMSESSION" ]; then
  fi
  
- # otherwise, take default action
+ SWITCHDESKPATH=/usr/share/switchdesk
++XSESSIONSPATH=/usr/share/xsessions
++
++# Since GNOME 3.10, GApplication can use the session bus to launch programs:
++#
++# https://wiki.gnome.org/HowDoI/DBusApplicationLaunching
++#
++# but GIO relies on XDG_CURRENT_DESKTOP for determining $desktop-mimeapps.list:
++#
++# http://standards.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html
++# https://git.gnome.org/browse/glib/tree/gio/gdesktopappinfo.c
++#
++# so at least XDG_CURRENT_DESKTOP must be set *before* 00-start-message-bus.sh
++# so that DBusActivatable applications (e.g. Nautilus) open files in accordance
++# with $desktop-mimeapps.list.
++if [ -f "$XSESSIONSPATH/$1.desktop" ]; then
++   eval $(sed -ne 's|^\(DesktopNames\)=\(.*\)|\1="\2"|;s|;|:|gp' "$XSESSIONSPATH/$1.desktop")
++   export DESKTOP_SESSION="$1";
++   export XDG_SESSION_DESKTOP="$1";
++   [ -z "$DesktopNames" ] || export XDG_CURRENT_DESKTOP=${DesktopNames%:};
++fi
+ 
+ # Mandatorily source xinitrc-common, which is common code shared between the
+ # Xsession and xinitrc scripts which has been factored out to avoid duplication
+ . /etc/X11/xinit/xinitrc-common
+ 
++case "$1" in
++# use gnome-keyring for SSH_AGENT, RHBZ#441123
++gnome*|mate)  unset SSH_AGENT ;;
++esac
++
+ # This Xsession.d implementation, is intended to obsolete and replace the
+ # various mechanisms present in the 'case' statement which follows, and to
+ # eventually be able to easily remove all hard coded window manager specific
+@@ -46,6 +71,12 @@ else
+ # now, we see if xdm/gdm/kdm has asked for a specific environment
+ case $# in
+ 1)
++    if [ -f "$XSESSIONSPATH/$1.desktop" ]; then
++       # environment set above
++       eval $(sed -ne 's|^\(Exec\)=\(.*\)|\1="\2"|p' "$XSESSIONSPATH/$1.desktop")
++       exec -l $SHELL -c "$CK_XINIT_SESSION $SSH_AGENT ${Exec}"
++    fi;
++
+     if [ -x "$SWITCHDESKPATH/Xclients.$1" ]; then
+        exec -l $SHELL -c "$SWITCHDESKPATH/Xclients.$1";
+     fi;
