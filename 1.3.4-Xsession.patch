@@ -19,7 +19,7 @@
 +# so that DBusActivatable applications (e.g. Nautilus) open files in accordance
 +# with $desktop-mimeapps.list.
 +if [ -f "$XSESSIONSPATH/$1.desktop" ]; then
-+   eval $(sed -ne 's|^\(DesktopNames\)=\(.*\)|\1="\2"|;s|;|:|gp' "$XSESSIONSPATH/$1.desktop")
++   eval $(sed -ne '/^DesktopNames=/s/\(;\|$\)/:/gp' "$XSESSIONSPATH/$1.desktop")
 +   export DESKTOP_SESSION="$1";
 +   export XDG_SESSION_DESKTOP="$1";
 +   [ -z "$DesktopNames" ] || export XDG_CURRENT_DESKTOP=${DesktopNames%:};
