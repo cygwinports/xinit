@@ -38,14 +38,21 @@ if [ -f $HOME/.startxwinrc ] ; then
     exec $CK_XINIT_SESSION $SSH_AGENT $HOME/.startxwinrc
 else
     export QT_STYLE_OVERRIDE="gtk"
+    export XDG_MENU_PREFIX="xwin-"
+    export XDG_CURRENT_DESKTOP="X-Cygwin"
     # default settings
     [ -x /usr/bin/xdg-user-dirs-gtk-update ] && /usr/bin/xdg-user-dirs-gtk-update
     [ -x /usr/bin/gsettings-data-convert ] && /usr/bin/gsettings-data-convert
 
-    if [ -x /usr/libexec/mate-notification-daemon ] ; then
-        /usr/libexec/mate-notification-daemon &
-    elif [ -x /usr/libexec/notification-daemon ] ; then
+    if [ -x /usr/bin/trayer ] ; then
+        /usr/bin/trayer --edge top --align left --widthtype request &
+        TRAY=1
+    fi
+
+    if [ -x /usr/libexec/notification-daemon -a -n "$TRAY" ] ; then
         /usr/libexec/notification-daemon &
+    elif [ -x /usr/libexec/mate-notification-daemon ] ; then
+        /usr/libexec/mate-notification-daemon &
     elif [ -x /usr/lib/xfce4/notifyd/xfce4-notifyd ] ; then
         /usr/lib/xfce4/notifyd/xfce4-notifyd &
     elif [ -x /usr/bin/lxqt-notificationd ] ; then
@@ -54,9 +61,9 @@ else
 
     if [ -x /usr/bin/start-pulseaudio-x11 ] ; then
         /usr/bin/start-pulseaudio-x11
-	if [ -x /usr/bin/pasystray ] ; then
+	if [ -x /usr/bin/pasystray -a -n "$TRAY" ] ; then
 	    /usr/bin/pasystray &
-	elif [ -x /usr/bin/mate-volume-control-applet ] ; then
+	elif [ -x /usr/bin/mate-volume-control-applet -a -n "$TRAY" ] ; then
 	    /usr/bin/mate-volume-control-applet &
 	fi
     fi
@@ -66,7 +73,7 @@ else
         export GNOME_KEYRING_CONTROL GPG_AGENT_INFO SSH_AUTH_SOCK
     fi
 
-    [ -x /usr/bin/krb5-auth-dialog ] && /usr/bin/krb5-auth-dialog &
+    [ -x /usr/bin/krb5-auth-dialog -a -n "$TRAY" ] && /usr/bin/krb5-auth-dialog &
 
     if [ -x /usr/libexec/evolution/3.12/evolution-alarm-notify ] ; then
         /usr/libexec/evolution/3.12/evolution-alarm-notify &
@@ -76,7 +83,6 @@ else
 
     [ -x /usr/bin/seahorse-sharing ] && /usr/bin/seahorse-sharing &
     [ -x /usr/bin/zeitgeist-datahub ] && /usr/bin/zeitgeist-datahub &
-    [ -x /usr/bin/xterm ] && /usr/bin/xterm &
     [ -x /usr/bin/fbxkb ] && /usr/bin/fbxkb &
-    [ -x /usr/bin/fbpanel ] && exec /usr/bin/fbpanel -p multiwindow
+    exec /usr/bin/xwin-xdg-menu
 fi
