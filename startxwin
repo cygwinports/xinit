@@ -117,7 +117,7 @@ fi
 if [ x"$serverargs" = x ]; then
     serverargs=$defaultserverargs
 fi
-serverargs="-multiwindow $defaultserverargs"
+serverargs="-multiwindow $serverargs"
 
 # if no vt is specified add vtarg (which may be empty)
 have_vtarg="no"
