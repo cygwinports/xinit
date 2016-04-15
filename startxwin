@@ -21,7 +21,7 @@ sysserverrc=/etc/X11/xinit/xserverrc
 defaultclient=xterm
 defaultserver=/usr/bin/XWin
 defaultclientargs=""
-defaultserverargs="-multiwindow"
+defaultserverargs=""
 defaultdisplay=":0"
 clientargs=""
 serverargs=""
@@ -32,7 +32,8 @@ enable_xauth=1
 # Automatically determine an unused $DISPLAY
 d=0
 while true ; do
-    [ -e /tmp/.X$d-lock ] || break
+    [ -e "/tmp/.X$d-lock" -o -S "/tmp/.X11-unix/X$d" ] || break
+    kill -0 `cat /tmp/.X$d-lock` 2>/dev/null || break
     d=$(($d + 1))
 done
 defaultdisplay=":$d"
@@ -116,6 +117,7 @@ fi
 if [ x"$serverargs" = x ]; then
     serverargs=$defaultserverargs
 fi
+serverargs="-multiwindow $defaultserverargs"
 
 # if no vt is specified add vtarg (which may be empty)
 have_vtarg="no"

@@ -1,0 +1,22 @@
+From 8d53d95f93795e465cfbca2fb969df155bff065d Mon Sep 17 00:00:00 2001
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Date: Mon, 30 Mar 2015 15:18:15 +0100
+Subject: [PATCH app/xinit] Ignore stale lockfiles
+
+Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+---
+ startx.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/startx.cpp b/startx.cpp
+index eef2f8b..5919bbb 100644
+--- a/startx.cpp
++++ b/startx.cpp
+@@ -121,6 +121,7 @@ XCOMM Automatically determine an unused
+ d=0
+ while true ; do
+     [ -e "/tmp/.X$d-lock" -o -S "/tmp/.X11-unix/X$d" ] || break
++    kill -0 `cat /tmp/.X$d-lock` 2>/dev/null || break
+     d=$(($d + 1))
+ done
+ defaultdisplay=":$d"
