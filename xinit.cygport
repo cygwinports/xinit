@@ -2,7 +2,7 @@ inherit xorg
 
 NAME="xinit"
 VERSION=1.3.4
-RELEASE=11
+RELEASE=12
 CATEGORY="X11"
 SUMMARY="X.Org X server launcher"
 DESCRIPTION="This package contains programs used to start the X Window System

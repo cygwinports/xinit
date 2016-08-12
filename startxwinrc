@@ -36,7 +36,7 @@ else
     # define these first for the benefit of DBusActivable apps:
     # https://wiki.gnome.org/HowDoI/DBusApplicationLaunching
     export IMSETTINGS_INTEGRATE_DESKTOP=no
-    export QT_STYLE_OVERRIDE="gtk"
+    export QT_QPA_PLATFORMTHEME="qt5ct"
     export XDG_MENU_PREFIX="xwin-"
     export XDG_CURRENT_DESKTOP="X-Cygwin"
     # Mandatorily source xinitrc-common, which is common code shared between the
