@@ -2,7 +2,7 @@ inherit xorg
 
 NAME="xinit"
 VERSION=1.3.4
-RELEASE=12
+RELEASE=13
 CATEGORY="X11"
 SUMMARY="X.Org X server launcher"
 DESCRIPTION="This package contains programs used to start the X Window System
@@ -35,6 +35,8 @@ PATCH_URI="
 	1.3.4-Xsession.patch
 	1.3.4-displayfd.patch
 	1.3.4-ignore-stale-lockfiles.patch
+	1.3.4-display-env.patch
+	1.3.4-xsession-icon.patch
 "
 
 xinit_REQUIRES="adwaita-themes dbus-x11 run sed util-linux setxkbmap xauth xdg-user-dirs xmodmap xrdb xorg-server xterm xwin-xdg-menu"

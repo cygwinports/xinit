@@ -1,0 +1,14 @@
+--- origsrc/xinit-1.3.4/startx.cpp	2016-09-18 20:36:01.502603400 -0500
++++ src/xinit-1.3.4/startx.cpp	2016-09-18 20:46:59.181164300 -0500
+@@ -216,6 +216,11 @@ if [ x"$serverargs" = x ]; then
+     serverargs=$defaultserverargs
+ fi
+ 
++XCOMM set icon if available
++if [  -f "/usr/share/pixmaps/xwin/$XSESSION_ICON.ico" ]; then
++    serverargs="$serverargs -icon /usr/share/pixmaps/xwin/$XSESSION_ICON.ico"
++fi
++
+ XCOMM if no vt is specified add vtarg (which may be empty)
+ have_vtarg="no"
+ for i in $serverargs; do
