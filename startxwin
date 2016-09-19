@@ -26,6 +26,7 @@ defaultdisplay=":0"
 clientargs=""
 serverargs=""
 vtarg=""
+display=""
 enable_xauth=1
 
 

@@ -1,0 +1,20 @@
+Ignore any setting of 'display' in the environment
+
+If xinit is not invoked with a display number, and the 'display' environment
+variable is set, that will be used as the display number, rather that the
+default display number determined as 'defaultdisplay'.
+
+Yes, this happened to someone...
+
+Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+
+--- origsrc/xinit-1.3.4/startx.cpp	2016-09-18 20:31:51.049635400 -0500
++++ src/xinit-1.3.4/startx.cpp	2016-09-18 20:34:24.870300900 -0500
+@@ -60,6 +60,7 @@ defaultdisplay=":0"
+ clientargs=""
+ serverargs=""
+ vtarg=""
++display=""
+ 
+ #ifdef __APPLE__
+ 
